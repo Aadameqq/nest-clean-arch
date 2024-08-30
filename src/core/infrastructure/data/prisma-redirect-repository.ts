@@ -2,7 +2,7 @@ import { Redirect as PrismaRedirect } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { RedirectRepository } from '../../application/ports/redirect-repository';
-import { PrismaService } from '../../../prisma/prisma.service';
+import { PrismaService } from './prisma-service';
 import { Redirect } from '../../domain/redirect';
 import { RedirectId } from '../../domain/redirect-id';
 

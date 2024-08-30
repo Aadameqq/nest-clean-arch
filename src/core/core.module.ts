@@ -7,6 +7,7 @@ import { PrismaUserRepository } from './infrastructure/data/prisma-user-reposito
 import { UserInteractorImpl } from './application/interactors/user-interactor-impl';
 import { BcryptPasswordHasher } from './infrastructure/bcrypt-password-hasher';
 import { JsonwebtokenTokenManager } from './infrastructure/jsonwebtoken-token-manager';
+import { PrismaService } from './infrastructure/data/prisma-service';
 
 @Module({
     providers: [
@@ -18,6 +19,7 @@ import { JsonwebtokenTokenManager } from './infrastructure/jsonwebtoken-token-ma
             inject: [PrismaRedirectRepository],
         },
         PrismaRedirectRepository,
+
         {
             provide: UserInteractor,
             useFactory: (
@@ -40,6 +42,8 @@ import { JsonwebtokenTokenManager } from './infrastructure/jsonwebtoken-token-ma
         PrismaUserRepository,
         BcryptPasswordHasher,
         JsonwebtokenTokenManager,
+
+        PrismaService,
     ],
     exports: [RedirectInteractor, UserInteractor],
 })
