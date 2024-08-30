@@ -54,13 +54,10 @@ export class RedirectController {
     @UseAuth()
     @Post()
     public async create(
-        @Body() createRedirectRequest: CreateRedirectRequest,
+        @Body() { url }: CreateRedirectRequest,
         @GetAuthenticatedUser() user: AuthenticatedUser,
     ): Promise<CreateRedirectResponse> {
-        const redirect = await this.redirectInteractor.create(
-            createRedirectRequest.url,
-            user.id,
-        );
+        const redirect = await this.redirectInteractor.create(url, user.id);
         return CreateRedirectResponse.fromRedirect(redirect);
     }
 }

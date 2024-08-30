@@ -22,12 +22,9 @@ export class AuthController {
     @ApiUnauthorizedResponse({ description: 'Credentials were incorrect' })
     @ApiBadRequestResponse({ description: 'Login or password was empty' })
     @Post()
-    async post(@Body() createAuthRequest: CreateAuthRequest) {
+    public async post(@Body() { username, password }: CreateAuthRequest) {
         try {
-            const token = await this.userInteractor.logIn(
-                createAuthRequest.username, // TODO:
-                createAuthRequest.password,
-            );
+            const token = await this.userInteractor.logIn(username, password);
 
             return CreateAuthResponse.fromToken(token);
         } catch (ex) {

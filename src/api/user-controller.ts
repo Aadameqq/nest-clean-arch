@@ -18,12 +18,9 @@ export class UserController {
     @ApiCreatedResponse({ description: 'Created new Account' })
     @ApiBadRequestResponse({ description: "Given data didn't pass validation" })
     @Post('/')
-    public async register(@Body() createUserRequest: CreateUserRequest) {
+    public async register(@Body() { username, password }: CreateUserRequest) {
         try {
-            await this.userInteractor.register(
-                createUserRequest.username,
-                createUserRequest.password,
-            );
+            await this.userInteractor.register(username, password);
         } catch (ex) {
             if (ex instanceof UsernameOccupied) {
                 throw new ConflictException();
