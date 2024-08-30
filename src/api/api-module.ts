@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './auth-controller';
 import { RedirectController } from './redirect-controller';
-import { UserProfileController } from './user-profile-controller';
+import { CoreModule } from '../core/core.module';
+import { UserRedirectController } from './user-redirect-controller';
 
 @Module({
-    controllers: [AuthController, RedirectController, UserProfileController],
+    controllers: [RedirectController, UserRedirectController],
+    imports: [CoreModule],
 })
 export class ApiModule {}

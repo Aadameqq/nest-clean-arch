@@ -1,5 +1,5 @@
-import { Redirect } from './Redirect';
-import { RedirectId } from './RedirectId';
+import { Redirect } from '../../domain/redirect';
+import { RedirectId } from '../../domain/redirect-id';
 
 export interface RedirectRepository {
     getById(id: RedirectId): Promise<Redirect | false>;

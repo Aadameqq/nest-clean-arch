@@ -2,7 +2,6 @@ import {
     Body,
     Controller,
     Get,
-    HttpStatus,
     NotFoundException,
     Param,
     Post,
@@ -14,42 +13,36 @@ import {
     ApiOkResponse,
     ApiOperation,
     ApiParam,
-    ApiResponse,
     ApiTags,
 } from '@nestjs/swagger';
-import { RedirectService } from '../redirect/RedirectService';
 import { CreateRedirectResponse } from './dtos/create-redirect-response';
-import { UseAuth } from '../auth-api/UseAuth';
-import { GetAuthenticatedUser } from '../auth-api/GetAuthenticatedUser';
-import { AuthenticatedUser } from '../auth-api/AuthenticatedUser';
 import { ReadRedirectResponse } from './dtos/read-redirect-response';
-import { ReadManyRedirectsResponse } from './dtos/read-many-redirects-response';
-import { RedirectNotFoundException } from '../redirect/RedirectNotFoundException';
-import { RedirectIdGenerator } from '../redirect/RedirectIdGenerator';
-import { RedirectId } from '../redirect/RedirectId';
+import { RedirectNotFound } from '../core/domain/redirect-not-found';
+import { RedirectId } from '../core/domain/redirect-id';
 import { CreateRedirectRequest } from './dtos/create-redirect-request';
+import { UseAuth } from './auth/use-auth';
+import { GetAuthenticatedUser } from './auth/get-authenticated-user';
+import { AuthenticatedUser } from './auth/authenticated-user';
+import { RedirectInteractor } from '../core/application/interactors/redirect-interactor';
 
 @Controller('redirects')
 @ApiTags('Redirect')
 export class RedirectController {
-    public constructor(
-        private redirectService: RedirectService,
-        private redirectIdGenerator: RedirectIdGenerator,
-    ) {}
+    public constructor(private redirectInteractor: RedirectInteractor) {}
 
-    @ApiOperation({ summary: 'Redirects to url with given id' })
+    @ApiOperation({ summary: 'Views redirect' })
     @ApiParam({ name: 'id' })
     @ApiNotFoundResponse()
     @ApiOkResponse({ type: ReadRedirectResponse })
     @Get('/:id')
     public async read(@Param('id') id: string): Promise<ReadRedirectResponse> {
         try {
-            const redirect = await this.redirectService.getById(
+            const redirect = await this.redirectInteractor.view(
                 RedirectId.fromString(id),
             );
             return ReadRedirectResponse.fromRedirect(redirect);
         } catch (ex) {
-            if (ex instanceof RedirectNotFoundException) {
+            if (ex instanceof RedirectNotFound) {
                 throw new NotFoundException();
             }
             throw ex;
@@ -64,24 +57,10 @@ export class RedirectController {
         @Body() createRedirectRequest: CreateRedirectRequest,
         @GetAuthenticatedUser() user: AuthenticatedUser,
     ): Promise<CreateRedirectResponse> {
-        const redirectId = this.redirectIdGenerator.generateNew();
-        const redirect = createRedirectRequest.toRedirect(redirectId, user.id);
-
-        await this.redirectService.create(redirect);
-        return CreateRedirectResponse.fromRedirect(redirect);
-    }
-
-    @ApiBearerAuth()
-    @ApiOkResponse({ type: ReadManyRedirectsResponse })
-    @UseAuth()
-    @Get()
-    public async readMany(
-        @GetAuthenticatedUser() user: AuthenticatedUser,
-    ): Promise<ReadManyRedirectsResponse> {
-        const foundRedirects = await this.redirectService.getAllByOwnerId(
+        const redirect = await this.redirectInteractor.create(
+            createRedirectRequest.url,
             user.id,
         );
-
-        return ReadManyRedirectsResponse.fromRedirectsList(foundRedirects);
+        return CreateRedirectResponse.fromRedirect(redirect);
     }
 }

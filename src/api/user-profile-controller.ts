@@ -6,11 +6,11 @@ import {
 } from '@nestjs/swagger';
 import { Controller, Get } from '@nestjs/common';
 import { UserProfileService } from '../user-profile/UserProfileService';
-import { AuthenticatedUser } from '../auth-api/AuthenticatedUser';
-import { GetAuthenticatedUser } from '../auth-api/GetAuthenticatedUser';
-import { UseAuth } from '../auth-api/UseAuth';
 import { UserProfileId } from '../user-profile/UserProfileId';
 import { ReadUserProfileResponse } from './dtos/read-user-profile-response';
+import { UseAuth } from './auth/use-auth';
+import { GetAuthenticatedUser } from './auth/get-authenticated-user';
+import { AuthenticatedUser } from './auth/authenticated-user';
 
 @Controller('/user/profile')
 @ApiTags('User profile')

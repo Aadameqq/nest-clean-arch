@@ -1,4 +1,4 @@
-import { RedirectId } from './RedirectId';
+import { RedirectId } from './redirect-id';
 
 export class Redirect {
     constructor(

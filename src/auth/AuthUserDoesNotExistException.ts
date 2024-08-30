@@ -1,3 +1,3 @@
-import { DomainException } from '../common/DomainException';
+import { DomainException } from '../core/domain/domain-exception';
 
 export class AuthUserDoesNotExistException extends DomainException {}

@@ -11,8 +11,8 @@ import { InvalidTokenException } from '../../auth/InvalidTokenException';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    public constructor(private authService: AuthService) {}
-
+    // public constructor(private authService: AuthService) {}
+    // TODO:
     public async canActivate(context: ExecutionContext): Promise<boolean> {
         const req = context.switchToHttp().getRequest();
 
@@ -23,12 +23,12 @@ export class AuthGuard implements CanActivate {
         if (!token) throw new UnauthorizedException();
 
         try {
-            const tokenPayloadUser = await this.authService.fetchAuthUser(
-                Token.fromString(token),
-            );
+            // const tokenPayloadUser = await this.authService.fetchAuthUser(
+            //     Token.fromString(token),
+            // );
 
-            req.authenticatedUser =
-                AuthenticatedUser.fromTokenPayloadUser(tokenPayloadUser);
+            // req.authenticatedUser =
+            //     AuthenticatedUser.fromTokenPayloadUser(tokenPayloadUser);
 
             return true;
         } catch (ex) {
