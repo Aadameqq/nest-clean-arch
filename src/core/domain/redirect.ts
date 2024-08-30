@@ -1,7 +1,7 @@
 import { RedirectId } from './redirect-id';
 
 export class Redirect {
-    constructor(
+    public constructor(
         public id: RedirectId,
 
         public url: string,

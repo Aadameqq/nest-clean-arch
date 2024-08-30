@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Redirect } from '../../domain/redirect';
 import { RedirectRepository } from '../ports/redirect-repository';
-import { RedirectNotFound } from '../../domain/redirect-not-found';
+import { NoSuchRedirect } from '../../domain/no-such-redirect';
 import { RedirectId } from '../../domain/redirect-id';
 import { RedirectInteractor } from './redirect-interactor';
 
@@ -14,7 +14,7 @@ export class RedirectInteractorImpl extends RedirectInteractor {
     public async view(id: RedirectId) {
         const redirect = await this.redirectRepository.getById(id);
 
-        if (!redirect) throw new RedirectNotFound();
+        if (!redirect) throw new NoSuchRedirect();
 
         redirect.incrementUses(); // TODO: add event
         await this.redirectRepository.persist(redirect);

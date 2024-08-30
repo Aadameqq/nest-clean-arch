@@ -17,7 +17,7 @@ import {
 } from '@nestjs/swagger';
 import { CreateRedirectResponse } from './dtos/create-redirect-response';
 import { ReadRedirectResponse } from './dtos/read-redirect-response';
-import { RedirectNotFound } from '../core/domain/redirect-not-found';
+import { NoSuchRedirect } from '../core/domain/no-such-redirect';
 import { RedirectId } from '../core/domain/redirect-id';
 import { CreateRedirectRequest } from './dtos/create-redirect-request';
 import { UseAuth } from './auth/use-auth';
@@ -42,7 +42,7 @@ export class RedirectController {
             );
             return ReadRedirectResponse.fromRedirect(redirect);
         } catch (ex) {
-            if (ex instanceof RedirectNotFound) {
+            if (ex instanceof NoSuchRedirect) {
                 throw new NotFoundException();
             }
             throw ex;
