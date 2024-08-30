@@ -1,4 +1,4 @@
-import { Redirect as PrismaRedirect } from '@prisma/client';
+import { Redirect as RedirectModel } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { RedirectRepository } from '../../application/ports/redirect-repository';
@@ -10,32 +10,22 @@ import { RedirectId } from '../../domain/redirect-id';
 export class PrismaRedirectRepository implements RedirectRepository {
     public constructor(private prismaService: PrismaService) {}
 
-    generateIdentity(): RedirectId {
+    public generateIdentity(): RedirectId {
         return RedirectId.fromString(uuid());
     }
 
-    async getById(id: RedirectId): Promise<Redirect | false> {
+    public async getById(id: RedirectId): Promise<Redirect | false> {
         const found = await this.prismaService.redirect.findUnique({
             where: { id: id.toString() },
         });
 
         if (!found) return false;
 
-        return new Redirect(
-            RedirectId.fromString(found.id),
-            found.url,
-            found.ownerId,
-            found.usesAmount,
-        );
+        return this.convertModelToRedirect(found);
     }
 
-    async persist(redirect: Redirect): Promise<void> {
-        const redirectModel: PrismaRedirect = {
-            id: redirect.id.toString(),
-            url: redirect.url,
-            ownerId: redirect.ownerId,
-            usesAmount: redirect.useCount,
-        };
+    public async persist(redirect: Redirect): Promise<void> {
+        const redirectModel = this.convertRedirectToModel(redirect);
 
         await this.prismaService.redirect.upsert({
             where: { id: redirectModel.id },
@@ -44,19 +34,29 @@ export class PrismaRedirectRepository implements RedirectRepository {
         });
     }
 
-    async getAllByOwnerId(ownerId: string): Promise<Redirect[]> {
+    public async getAllByOwnerId(ownerId: string): Promise<Redirect[]> {
         const found = await this.prismaService.redirect.findMany({
             where: { ownerId },
         });
 
-        return found.map(
-            (single) =>
-                new Redirect(
-                    RedirectId.fromString(single.id),
-                    single.url,
-                    single.ownerId,
-                    single.usesAmount,
-                ),
+        return found.map((single) => this.convertModelToRedirect(single));
+    }
+
+    private convertModelToRedirect(model: RedirectModel): Redirect {
+        return new Redirect(
+            RedirectId.fromString(model.id),
+            model.url,
+            model.ownerId,
+            model.usesAmount,
         );
+    }
+
+    private convertRedirectToModel(redirect: Redirect): RedirectModel {
+        return {
+            id: redirect.id.toString(),
+            url: redirect.url,
+            ownerId: redirect.ownerId,
+            usesAmount: redirect.useCount,
+        };
     }
 }
