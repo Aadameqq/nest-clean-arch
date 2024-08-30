@@ -1,4 +1,4 @@
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from './AuthGuard';
+import { AuthGuard } from './auth-guard';
 
 export const UseAuth = () => UseGuards(AuthGuard);

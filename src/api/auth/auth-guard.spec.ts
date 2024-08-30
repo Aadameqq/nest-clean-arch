@@ -1,4 +1,4 @@
-import { AuthGuard } from './AuthGuard';
+import { AuthGuard } from './auth-guard';
 
 describe('AuthGuard.extractTokenFromHeader', () => {
     test.each([

@@ -10,7 +10,7 @@ import { UserApiModule } from './user-api/UserApiModule';
 import { UserProfileModule } from './user-profile/UserProfileModule';
 import { UserProfileApiModule } from './user-profile-api/UserProfileApiModule';
 import { CoreModule } from './core/core.module';
-import { ApiModule } from './api/api.module';
+import { ApiModule } from './api/api-module';
 
 @Module({
     imports: [

@@ -10,7 +10,7 @@ import { AuthenticatedUser } from '../auth-api/AuthenticatedUser';
 import { GetAuthenticatedUser } from '../auth-api/GetAuthenticatedUser';
 import { UseAuth } from '../auth-api/UseAuth';
 import { UserProfileId } from '../user-profile/UserProfileId';
-import { ReadUserProfileResponse } from './dtos/ReadUserProfileResponse';
+import { ReadUserProfileResponse } from './dtos/read-user-profile-response';
 
 @Controller('/user/profile')
 @ApiTags('User profile')

@@ -13,9 +13,9 @@ import {
     ApiTags,
     ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { LoginUserDto } from './dtos/login-user.dto';
+import { CreateAuthRequest } from './dtos/create-auth-request';
 import { AuthService } from '../auth/AuthService';
-import { RegisterUserDto } from './dtos/register-user.dto';
+import { CreateUserRequest } from './dtos/create-user-request';
 import { AuthUserFactory } from '../auth/AuthUserFactory';
 import { AuthUserDoesNotExistException } from '../auth/AuthUserDoesNotExistException';
 import { InvalidPasswordException } from '../auth/InvalidPasswordException';
@@ -34,7 +34,7 @@ export class AuthController {
     @ApiUnauthorizedResponse({ description: 'Credentials were incorrect' })
     @ApiBadRequestResponse({ description: 'Login or password was empty' })
     @Post()
-    async login(@Body() loginUserDto: LoginUserDto) {
+    async login(@Body() loginUserDto: CreateAuthRequest) {
         try {
             const token = await this.authService.logIn(
                 loginUserDto.username,
@@ -57,7 +57,7 @@ export class AuthController {
     @ApiCreatedResponse({ description: 'Created new Account' })
     @ApiBadRequestResponse({ description: "Given data didn't pass validation" })
     @Post('/temporary')
-    public async register(@Body() registerUserDto: RegisterUserDto) {
+    public async register(@Body() registerUserDto: CreateUserRequest) {
         const authUser = this.authUserFactory.create(
             registerUserDto.username,
             registerUserDto.password,

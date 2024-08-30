@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Token } from '../../auth/Token';
 import { AuthService } from '../../auth/AuthService';
-import { AuthenticatedUser } from './AuthenticatedUser';
+import { AuthenticatedUser } from './authenticated-user';
 import { InvalidTokenException } from '../../auth/InvalidTokenException';
 
 @Injectable()
