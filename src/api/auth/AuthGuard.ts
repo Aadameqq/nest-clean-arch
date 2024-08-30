@@ -4,10 +4,10 @@ import {
     Injectable,
     UnauthorizedException,
 } from '@nestjs/common';
-import { Token } from '../auth/Token';
-import { AuthService } from '../auth/AuthService';
+import { Token } from '../../auth/Token';
+import { AuthService } from '../../auth/AuthService';
 import { AuthenticatedUser } from './AuthenticatedUser';
-import { InvalidTokenException } from '../auth/InvalidTokenException';
+import { InvalidTokenException } from '../../auth/InvalidTokenException';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

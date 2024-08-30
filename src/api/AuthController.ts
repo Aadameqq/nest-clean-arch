@@ -57,7 +57,7 @@ export class AuthController {
     @ApiCreatedResponse({ description: 'Created new Account' })
     @ApiBadRequestResponse({ description: "Given data didn't pass validation" })
     @Post('/temporary')
-    async register(@Body() registerUserDto: RegisterUserDto) {
+    public async register(@Body() registerUserDto: RegisterUserDto) {
         const authUser = this.authUserFactory.create(
             registerUserDto.username,
             registerUserDto.password,

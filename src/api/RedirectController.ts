@@ -18,16 +18,16 @@ import {
     ApiTags,
 } from '@nestjs/swagger';
 import { RedirectService } from '../redirect/RedirectService';
-import { CreateRedirectResponse } from './dto/CreateRedirectResponse';
+import { CreateRedirectResponse } from './dtos/CreateRedirectResponse';
 import { UseAuth } from '../auth-api/UseAuth';
 import { GetAuthenticatedUser } from '../auth-api/GetAuthenticatedUser';
 import { AuthenticatedUser } from '../auth-api/AuthenticatedUser';
-import { ReadRedirectResponse } from './dto/ReadRedirectResponse';
-import { ReadManyRedirectsResponse } from './dto/ReadManyRedirectsResponse';
+import { ReadRedirectResponse } from './dtos/ReadRedirectResponse';
+import { ReadManyRedirectsResponse } from './dtos/ReadManyRedirectsResponse';
 import { RedirectNotFoundException } from '../redirect/RedirectNotFoundException';
 import { RedirectIdGenerator } from '../redirect/RedirectIdGenerator';
 import { RedirectId } from '../redirect/RedirectId';
-import { CreateRedirectRequest } from './dto/CreateRedirectRequest';
+import { CreateRedirectRequest } from './dtos/CreateRedirectRequest';
 
 @Controller('redirects')
 @ApiTags('Redirect')

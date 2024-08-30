@@ -1,4 +1,4 @@
-import { TokenPayloadUser } from '../auth/TokenPayloadUser';
+import { TokenPayloadUser } from '../../auth/TokenPayloadUser';
 
 export class AuthenticatedUser {
     private constructor(
