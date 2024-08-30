@@ -12,7 +12,7 @@ import { UserInteractor } from '../core/application/interactors/user-interactor'
 @Controller('users')
 @ApiTags('User')
 export class UserController {
-    constructor(private userInteractor: UserInteractor) {}
+    public constructor(private userInteractor: UserInteractor) {}
 
     @ApiOperation({ summary: 'Creates new user' })
     @ApiCreatedResponse({ description: 'Created new Account' })
