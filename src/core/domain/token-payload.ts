@@ -1,8 +1,6 @@
-export class TokenPayloadUser {
+export class TokenPayload {
     public constructor(
         public readonly id: string,
         public readonly username: string,
-    ) {
-        // TODO:
-    }
+    ) {}
 }

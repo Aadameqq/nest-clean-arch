@@ -1,73 +1,37 @@
-import {
-    Body,
-    ConflictException,
-    Controller,
-    Post,
-    UnauthorizedException,
-} from '@nestjs/common';
+import { Body, Controller, Post, UnauthorizedException } from '@nestjs/common';
 import {
     ApiBadRequestResponse,
-    ApiCreatedResponse,
     ApiOkResponse,
     ApiOperation,
     ApiTags,
     ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { CreateAuthRequest } from './dtos/create-auth-request';
-import { AuthService } from '../auth/AuthService';
-import { CreateUserRequest } from './dtos/create-user-request';
-import { AuthUserFactory } from '../auth/AuthUserFactory';
-import { AuthUserDoesNotExistException } from '../auth/AuthUserDoesNotExistException';
-import { InvalidPasswordException } from '../auth/InvalidPasswordException';
-import { UsernameOccupiedException } from '../auth/UsernameOccupiedException';
+import { InvalidPassword } from '../core/domain/invalid-password';
+import { UserInteractor } from '../core/application/interactors/user-interactor';
+import { NoSuchUser } from '../core/domain/no-such-user';
 
 @Controller('auth')
 @ApiTags('Auth')
 export class AuthController {
-    constructor(
-        private authService: AuthService,
-        private authUserFactory: AuthUserFactory,
-    ) {}
+    constructor(private userInteractor: UserInteractor) {}
 
     @ApiOperation({ summary: 'Creates access token for given user' })
     @ApiOkResponse({ description: 'Logged in successfully' })
     @ApiUnauthorizedResponse({ description: 'Credentials were incorrect' })
     @ApiBadRequestResponse({ description: 'Login or password was empty' })
     @Post()
-    async login(@Body() loginUserDto: CreateAuthRequest) {
+    async post(@Body() createAuthRequest: CreateAuthRequest) {
         try {
-            const token = await this.authService.logIn(
-                loginUserDto.username,
-                loginUserDto.password,
+            const token = await this.userInteractor.logIn(
+                createAuthRequest.username, // TODO:
+                createAuthRequest.password,
             );
 
-            return { token };
+            return { token: token.toString() }; // TODO:
         } catch (ex) {
-            if (
-                ex instanceof AuthUserDoesNotExistException ||
-                ex instanceof InvalidPasswordException
-            ) {
+            if (ex instanceof NoSuchUser || ex instanceof InvalidPassword) {
                 throw new UnauthorizedException();
-            }
-            throw ex;
-        }
-    }
-
-    @ApiOperation({ summary: 'Creates new user' })
-    @ApiCreatedResponse({ description: 'Created new Account' })
-    @ApiBadRequestResponse({ description: "Given data didn't pass validation" })
-    @Post('/temporary')
-    public async register(@Body() registerUserDto: CreateUserRequest) {
-        const authUser = this.authUserFactory.create(
-            registerUserDto.username,
-            registerUserDto.password,
-        );
-
-        try {
-            await this.authService.register(authUser);
-        } catch (ex) {
-            if (ex instanceof UsernameOccupiedException) {
-                throw new ConflictException();
             }
             throw ex;
         }

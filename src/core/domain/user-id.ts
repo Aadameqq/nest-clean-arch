@@ -1,8 +1,8 @@
-export class UserProfileId {
+export class UserId {
     private constructor(private readonly id: string) {}
 
     public static fromString(newId: string) {
-        return new UserProfileId(newId);
+        return new UserId(newId);
     }
 
     public toString() {

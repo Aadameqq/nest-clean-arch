@@ -4,15 +4,15 @@ import {
     Injectable,
     UnauthorizedException,
 } from '@nestjs/common';
-import { Token } from '../../auth/Token';
-import { AuthService } from '../../auth/AuthService';
+import { InvalidToken } from '../../core/domain/invalid-token';
+import { UserInteractor } from '../../core/application/interactors/user-interactor';
+import { Token } from '../../core/domain/token';
 import { AuthenticatedUser } from './authenticated-user';
-import { InvalidTokenException } from '../../auth/InvalidTokenException';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-    // public constructor(private authService: AuthService) {}
-    // TODO:
+    public constructor(private userInteractor: UserInteractor) {}
+
     public async canActivate(context: ExecutionContext): Promise<boolean> {
         const req = context.switchToHttp().getRequest();
 
@@ -23,16 +23,16 @@ export class AuthGuard implements CanActivate {
         if (!token) throw new UnauthorizedException();
 
         try {
-            // const tokenPayloadUser = await this.authService.fetchAuthUser(
-            //     Token.fromString(token),
-            // );
+            const tokenPayload = await this.userInteractor.retrieveTokenPayload(
+                Token.fromString(token),
+            );
 
-            // req.authenticatedUser =
-            //     AuthenticatedUser.fromTokenPayloadUser(tokenPayloadUser);
+            req.authenticatedUser =
+                AuthenticatedUser.fromTokenPayloadUser(tokenPayload);
 
             return true;
         } catch (ex) {
-            if (ex instanceof InvalidTokenException) {
+            if (ex instanceof InvalidToken) {
                 throw new UnauthorizedException();
             }
             throw ex;

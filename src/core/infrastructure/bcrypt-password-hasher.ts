@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
-import { PasswordHasher } from './PasswordHasher';
-import { ConfigurationService } from '../configuration/configuration.service';
+import { PasswordHasher } from '../application/ports/password-hasher';
+import { ConfigurationService } from '../../configuration/configuration.service';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
