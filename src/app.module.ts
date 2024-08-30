@@ -9,6 +9,8 @@ import { AuthApiModule } from './auth-api/AuthApiModule';
 import { UserApiModule } from './user-api/UserApiModule';
 import { UserProfileModule } from './user-profile/UserProfileModule';
 import { UserProfileApiModule } from './user-profile-api/UserProfileApiModule';
+import { CoreModule } from './core/core.module';
+import { ApiModule } from './api/api.module';
 
 @Module({
     imports: [
@@ -22,6 +24,8 @@ import { UserProfileApiModule } from './user-profile-api/UserProfileApiModule';
         UserApiModule,
         UserProfileModule,
         UserProfileApiModule,
+        CoreModule,
+        ApiModule,
     ],
     providers: [],
 })
