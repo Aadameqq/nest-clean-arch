@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsUrl } from 'class-validator';
 
 export class CreateRedirectRequest {
-    @ApiProperty()
+    @ApiProperty({ default: 'domain.domain' })
     @IsUrl()
     public readonly url: string;
 }
