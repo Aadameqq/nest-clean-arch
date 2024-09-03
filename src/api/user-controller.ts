@@ -60,7 +60,7 @@ export class UserController {
     })
     @ApiBearerAuth()
     @UseAuth()
-    @Put('/password')
+    @Put('/@me/password')
     public async updatePassword(
         @Body() { oldPassword, newPassword }: UpdateUserPasswordRequest,
         @GetAuthenticatedUser() user: AuthenticatedUser,
