@@ -51,15 +51,13 @@ export class UserInteractorImpl extends UserInteractor {
     ): Promise<void> {
         const found = await this.userRepository.getByUsername(username);
 
-        if (found) {
-            throw new UsernameOccupied();
-        }
+        if (found) throw new UsernameOccupied();
 
         const hashedPassword = await this.passwordHasher.hash(plainPassword);
 
         const id = this.userRepository.generateIdentity();
 
-        const user = new User(id, username, hashedPassword, username);
+        const user = new User(id, username, hashedPassword);
 
         await this.userRepository.persist(user);
     }
