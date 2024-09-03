@@ -14,4 +14,8 @@ export class Redirect {
     public incrementViews() {
         this.viewsCount += 1;
     }
+
+    public isOwnedBy(ownerId: string) {
+        return ownerId === this.ownerId;
+    }
 }

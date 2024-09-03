@@ -34,6 +34,12 @@ export class PrismaRedirectRepository implements RedirectRepository {
         });
     }
 
+    public async remove(redirect: Redirect) {
+        await this.prismaService.redirect.delete({
+            where: { id: redirect.id.toString() },
+        });
+    }
+
     public async getAllByOwnerId(ownerId: string): Promise<Redirect[]> {
         const found = await this.prismaService.redirect.findMany({
             where: { ownerId },

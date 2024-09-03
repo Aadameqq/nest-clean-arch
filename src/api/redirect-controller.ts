@@ -1,6 +1,8 @@
 import {
     Body,
     Controller,
+    Delete,
+    ForbiddenException,
     Get,
     NotFoundException,
     Param,
@@ -9,6 +11,7 @@ import {
 import {
     ApiBearerAuth,
     ApiCreatedResponse,
+    ApiForbiddenResponse,
     ApiNotFoundResponse,
     ApiOkResponse,
     ApiOperation,
@@ -24,6 +27,7 @@ import { UseAuth } from './auth/use-auth';
 import { GetAuthenticatedUser } from './auth/get-authenticated-user';
 import { AuthenticatedUser } from './auth/authenticated-user';
 import { RedirectInteractor } from '../core/application/interactors/redirect-interactor';
+import { UserIsNotRedirectOwner } from '../core/domain/user-is-not-redirect-owner';
 
 @Controller('redirects')
 @ApiTags('Redirect')
@@ -59,5 +63,31 @@ export class RedirectController {
     ): Promise<CreateRedirectResponse> {
         const redirect = await this.redirectInteractor.create(url, user.id);
         return CreateRedirectResponse.fromRedirect(redirect);
+    }
+
+    @ApiBearerAuth()
+    @ApiOkResponse()
+    @ApiNotFoundResponse()
+    @ApiForbiddenResponse()
+    @UseAuth()
+    @Delete('/:id')
+    public async remove(
+        @Param('id') id: string,
+        @GetAuthenticatedUser() user: AuthenticatedUser,
+    ): Promise<void> {
+        try {
+            await this.redirectInteractor.remove(
+                RedirectId.fromString(id),
+                user.id,
+            );
+        } catch (ex) {
+            if (ex instanceof NoSuchRedirect) {
+                throw new NotFoundException();
+            }
+            if (ex instanceof UserIsNotRedirectOwner) {
+                throw new ForbiddenException();
+            }
+            throw ex;
+        }
     }
 }

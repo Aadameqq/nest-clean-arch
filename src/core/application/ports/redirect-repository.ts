@@ -6,4 +6,5 @@ export interface RedirectRepository {
     persist(redirect: Redirect): Promise<void>;
     getAllByOwnerId(ownerId: string): Promise<Redirect[]>;
     generateIdentity(): RedirectId;
+    remove(redirect: Redirect): Promise<void>;
 }

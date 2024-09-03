@@ -6,6 +6,7 @@ import { RedirectId } from '../../domain/redirect-id';
 import { RedirectInteractor } from './redirect-interactor';
 import { RedirectViewedObservable } from '../ports/redirect-viewed-observable';
 import { RedirectViewed } from '../../domain/redirect-viewed';
+import { UserIsNotRedirectOwner } from '../../domain/user-is-not-redirect-owner';
 
 @Injectable()
 export class RedirectInteractorImpl extends RedirectInteractor {
@@ -38,5 +39,15 @@ export class RedirectInteractorImpl extends RedirectInteractor {
 
     public async listForOwner(ownerId: string) {
         return this.redirectRepository.getAllByOwnerId(ownerId);
+    }
+
+    public async remove(id: RedirectId, userId: string) {
+        const found = await this.redirectRepository.getById(id);
+
+        if (!found) throw new NoSuchRedirect();
+
+        if (!found.isOwnedBy(userId)) throw new UserIsNotRedirectOwner();
+
+        await this.redirectRepository.remove(found);
     }
 }
