@@ -11,4 +11,9 @@ export abstract class UserInteractor {
         plainPassword: string,
     ): Promise<void>;
     public abstract retrieveTokenPayload(token: Token): Promise<TokenPayload>;
+    public abstract changePassword(
+        userId: UserId,
+        newPassword: string,
+        oldPassword: string,
+    ): Promise<void>;
 }

@@ -7,7 +7,7 @@ import {
     ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { CreateAuthRequest } from './dtos/create-auth-request';
-import { InvalidPassword } from '../core/domain/invalid-password';
+import { WrongPassword } from '../core/domain/wrong-password';
 import { UserInteractor } from '../core/application/interactors/user-interactor';
 import { NoSuchUser } from '../core/domain/no-such-user';
 import { CreateAuthResponse } from './dtos/create-auth-response';
@@ -28,7 +28,7 @@ export class AuthController {
 
             return CreateAuthResponse.fromToken(token);
         } catch (ex) {
-            if (ex instanceof NoSuchUser || ex instanceof InvalidPassword) {
+            if (ex instanceof NoSuchUser || ex instanceof WrongPassword) {
                 throw new UnauthorizedException();
             }
             throw ex;

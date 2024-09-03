@@ -9,7 +9,7 @@ export class User {
         public readonly bio: string = '',
     ) {}
 
-    public setPassword(newPassword: string) {
+    public changePassword(newPassword: string) {
         this.password = newPassword;
     }
 }

@@ -2,7 +2,7 @@ import { UserId } from '../../domain/user-id';
 import { NoSuchUser } from '../../domain/no-such-user';
 import { UserRepository } from '../ports/user-repository';
 import { Token } from '../../domain/token';
-import { InvalidPassword } from '../../domain/invalid-password';
+import { WrongPassword } from '../../domain/wrong-password';
 import { UsernameOccupied } from '../../domain/username-occupied';
 import { InvalidToken } from '../../domain/invalid-token';
 import { User } from '../../domain/user';
@@ -10,6 +10,7 @@ import { TokenManager } from '../ports/token-manager';
 import { PasswordHasher } from '../ports/password-hasher';
 import { TokenPayload } from '../../domain/token-payload';
 import { UserInteractor } from './user-interactor';
+import { NewPasswordSameAsOld } from '../../domain/new-password-same-as-old';
 
 export class UserInteractorImpl extends UserInteractor {
     public constructor(
@@ -40,7 +41,7 @@ export class UserInteractorImpl extends UserInteractor {
             password,
         );
 
-        if (!isPasswordValid) throw new InvalidPassword();
+        if (!isPasswordValid) throw new WrongPassword();
 
         return this.tokenManager.createToken(user);
     }
@@ -70,5 +71,27 @@ export class UserInteractorImpl extends UserInteractor {
         if (!tokenPayload) throw new InvalidToken();
 
         return tokenPayload;
+    }
+
+    public async changePassword(
+        userId: UserId,
+        newPassword: string,
+        oldPassword: string,
+    ): Promise<void> {
+        const user = await this.userRepository.getById(userId);
+
+        if (!user) throw new NoSuchUser();
+
+        if (!(await this.passwordHasher.compare(user.password, oldPassword))) {
+            throw new WrongPassword();
+        }
+
+        if (oldPassword === newPassword) throw new NewPasswordSameAsOld();
+
+        const hashedNewPassword = await this.passwordHasher.hash(newPassword);
+
+        user.changePassword(hashedNewPassword);
+
+        await this.userRepository.persist(user);
     }
 }
