@@ -8,10 +8,10 @@ export class Redirect {
 
         public ownerId: string,
 
-        public useCount: number = 0,
+        public viewsCount: number = 0,
     ) {}
 
-    public incrementUses() {
-        this.useCount += 1;
+    public incrementViews() {
+        this.viewsCount += 1;
     }
 }

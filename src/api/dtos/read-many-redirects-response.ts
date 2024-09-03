@@ -9,19 +9,19 @@ class ReadManySingleRedirectResponse {
     public readonly url: string;
 
     @ApiProperty()
-    public readonly usesAmount: number;
+    public readonly viewsCount: number;
 
-    private constructor(id: string, url: string, usesAmount: number) {
+    private constructor(id: string, url: string, viewsCount: number) {
         this.id = id;
         this.url = url;
-        this.usesAmount = usesAmount;
+        this.viewsCount = viewsCount;
     }
 
     public static fromRedirect(redirect: Redirect) {
         return new ReadManySingleRedirectResponse(
             redirect.id.toString(),
             redirect.url,
-            redirect.useCount,
+            redirect.viewsCount,
         );
     }
 }

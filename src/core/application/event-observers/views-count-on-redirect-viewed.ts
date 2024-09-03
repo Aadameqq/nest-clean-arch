@@ -17,7 +17,7 @@ export class ViewsCountOnRedirectViewed implements RedirectViewedObserver {
         );
         if (!redirect) return;
 
-        redirect.incrementUses();
+        redirect.incrementViews();
 
         await this.redirectRepository.persist(redirect);
     }

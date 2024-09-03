@@ -25,7 +25,7 @@ model User {
 model Redirect {
   id         String @id
   url        String
-  usesAmount Int
+  viewsCount Int
   owner      User   @relation(fields: [ownerId], references: [id])
   ownerId    String
 }

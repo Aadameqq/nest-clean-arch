@@ -1,5 +1,5 @@
 import { Redirect as RedirectModel } from '@prisma/client';
-import { Catch, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { RedirectRepository } from '../../application/ports/redirect-repository';
 import { PrismaService } from './prisma-service';
@@ -7,7 +7,6 @@ import { Redirect } from '../../domain/redirect';
 import { RedirectId } from '../../domain/redirect-id';
 
 @Injectable()
-@Catch()
 export class PrismaRedirectRepository implements RedirectRepository {
     public constructor(private prismaService: PrismaService) {}
 
@@ -48,7 +47,7 @@ export class PrismaRedirectRepository implements RedirectRepository {
             RedirectId.fromString(model.id),
             model.url,
             model.ownerId,
-            model.usesAmount,
+            model.viewsCount,
         );
     }
 
@@ -57,7 +56,7 @@ export class PrismaRedirectRepository implements RedirectRepository {
             id: redirect.id.toString(),
             url: redirect.url,
             ownerId: redirect.ownerId,
-            usesAmount: redirect.useCount,
+            viewsCount: redirect.viewsCount,
         };
     }
 }
