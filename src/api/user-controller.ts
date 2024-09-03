@@ -1,10 +1,8 @@
 import {
-    BadRequestException,
     Body,
     ConflictException,
     Controller,
     ForbiddenException,
-    InternalServerErrorException,
     Post,
     Put,
     UnauthorizedException,
@@ -26,7 +24,6 @@ import { UseAuth } from './auth/use-auth';
 import { AuthenticatedUser } from './auth/authenticated-user';
 import { UserId } from '../core/domain/user-id';
 import { UpdateUserPasswordRequest } from './dtos/update-user-password-request';
-import { NoSuchRedirect } from '../core/domain/no-such-redirect';
 import { NoSuchUser } from '../core/domain/no-such-user';
 import { WrongPassword } from '../core/domain/wrong-password';
 import { NewPasswordSameAsOld } from '../core/domain/new-password-same-as-old';
