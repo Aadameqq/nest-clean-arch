@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { RedirectInteractor } from './application/interactors/redirect-interactor';
 import { PrismaRedirectRepository } from './infrastructure/data/prisma-redirect-repository';
 import { RedirectInteractorImpl } from './application/interactors/redirect-interactor-impl';
@@ -8,17 +9,35 @@ import { UserInteractorImpl } from './application/interactors/user-interactor-im
 import { BcryptPasswordHasher } from './infrastructure/bcrypt-password-hasher';
 import { JsonwebtokenTokenManager } from './infrastructure/jsonwebtoken-token-manager';
 import { PrismaService } from './infrastructure/data/prisma-service';
+import { NestRedirectViewedObservable } from './infrastructure/nest-redirect-viewed-observable';
+import { ViewsCountOnRedirectViewed } from './application/event-observers/views-count-on-redirect-viewed';
 
 @Module({
+    imports: [EventEmitterModule.forRoot()], // TODO:
     providers: [
         {
-            provide: RedirectInteractor,
-            useFactory: (repository: PrismaRedirectRepository) => {
-                return new RedirectInteractorImpl(repository);
+            provide: ViewsCountOnRedirectViewed,
+            useFactory: (
+                repository: PrismaRedirectRepository,
+                observable: NestRedirectViewedObservable,
+            ) => {
+                return new ViewsCountOnRedirectViewed(repository, observable);
             },
-            inject: [PrismaRedirectRepository],
+            inject: [PrismaRedirectRepository, NestRedirectViewedObservable],
+        },
+
+        {
+            provide: RedirectInteractor,
+            useFactory: (
+                repository: PrismaRedirectRepository,
+                observable: NestRedirectViewedObservable,
+            ) => {
+                return new RedirectInteractorImpl(repository, observable);
+            },
+            inject: [PrismaRedirectRepository, NestRedirectViewedObservable],
         },
         PrismaRedirectRepository,
+        NestRedirectViewedObservable,
 
         {
             provide: UserInteractor,
