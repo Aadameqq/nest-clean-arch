@@ -19,8 +19,8 @@ async function bootstrap() {
                 type: 'http',
             })
             .addTag('Auth')
-            .addTag('Redirect')
-            .addTag('User redirect')
+            .addTag('Redirection')
+            .addTag('User redirection')
             .addTag('User')
             .addTag('User profile')
             .build();

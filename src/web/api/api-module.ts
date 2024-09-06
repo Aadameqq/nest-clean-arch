@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { RedirectController } from './redirect-controller';
-import { UserRedirectController } from './user-redirect-controller';
+import { RedirectionController } from './redirection-controller';
+import { UserRedirectionController } from './user-redirection-controller';
 import { UserProfileController } from './user-profile-controller';
-import { AuthController } from './auth-controller';
+import { WebAuthController } from './web-auth-controller';
 import { UserController } from './user-controller';
 import { AuthModule } from '../auth/auth-module';
 import { CoreModule } from '../../core/core.module';
@@ -10,10 +10,10 @@ import { CoreModule } from '../../core/core.module';
 @Module({
     imports: [AuthModule, CoreModule],
     controllers: [
-        RedirectController,
-        UserRedirectController,
+        RedirectionController,
+        UserRedirectionController,
         UserProfileController,
-        AuthController,
+        WebAuthController,
         UserController,
     ],
 })

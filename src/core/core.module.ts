@@ -1,43 +1,49 @@
 import { Module } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { RedirectInteractor } from './application/interactors/redirect-interactor';
-import { PrismaRedirectRepository } from './infrastructure/data/prisma-redirect-repository';
-import { RedirectInteractorImpl } from './application/interactors/redirect-interactor-impl';
+import { RedirectionInteractor } from './application/interactors/redirection-interactor';
+import { PrismaRedirectionRepository } from './infrastructure/data/prisma-redirection-repository';
+import { RedirectionInteractorImpl } from './application/interactors/redirection-interactor-impl';
 import { UserInteractor } from './application/interactors/user-interactor';
 import { PrismaUserRepository } from './infrastructure/data/prisma-user-repository';
 import { UserInteractorImpl } from './application/interactors/user-interactor-impl';
 import { BcryptPasswordHasher } from './infrastructure/bcrypt-password-hasher';
 import { JsonwebtokenTokenManager } from './infrastructure/jsonwebtoken-token-manager';
 import { PrismaService } from './infrastructure/data/prisma-service';
-import { NestRedirectViewedObservable } from './infrastructure/nest-redirect-viewed-observable';
-import { ViewsCountOnRedirectViewed } from './application/event-observers/views-count-on-redirect-viewed';
+import { NestRedirectionUsedObservable } from './infrastructure/nest-redirection-used-observable.service';
+import { UsesCountOnRedirectionUsed } from './application/event-observers/uses-count-on-redirection-used';
 
 @Module({
     imports: [EventEmitterModule.forRoot()], // TODO:
     providers: [
         {
-            provide: ViewsCountOnRedirectViewed,
+            provide: UsesCountOnRedirectionUsed,
             useFactory: (
-                repository: PrismaRedirectRepository,
-                observable: NestRedirectViewedObservable,
+                repository: PrismaRedirectionRepository,
+                observable: NestRedirectionUsedObservable,
             ) => {
-                return new ViewsCountOnRedirectViewed(repository, observable);
+                return new UsesCountOnRedirectionUsed(repository, observable);
             },
-            inject: [PrismaRedirectRepository, NestRedirectViewedObservable],
+            inject: [
+                PrismaRedirectionRepository,
+                NestRedirectionUsedObservable,
+            ],
         },
 
         {
-            provide: RedirectInteractor,
+            provide: RedirectionInteractor,
             useFactory: (
-                repository: PrismaRedirectRepository,
-                observable: NestRedirectViewedObservable,
+                repository: PrismaRedirectionRepository,
+                observable: NestRedirectionUsedObservable,
             ) => {
-                return new RedirectInteractorImpl(repository, observable);
+                return new RedirectionInteractorImpl(repository, observable);
             },
-            inject: [PrismaRedirectRepository, NestRedirectViewedObservable],
+            inject: [
+                PrismaRedirectionRepository,
+                NestRedirectionUsedObservable,
+            ],
         },
-        PrismaRedirectRepository,
-        NestRedirectViewedObservable,
+        PrismaRedirectionRepository,
+        NestRedirectionUsedObservable,
 
         {
             provide: UserInteractor,
@@ -64,6 +70,6 @@ import { ViewsCountOnRedirectViewed } from './application/event-observers/views-
 
         PrismaService,
     ],
-    exports: [RedirectInteractor, UserInteractor],
+    exports: [RedirectionInteractor, UserInteractor],
 })
 export class CoreModule {}

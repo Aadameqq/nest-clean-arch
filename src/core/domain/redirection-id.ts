@@ -1,8 +1,8 @@
-export class RedirectId {
+export class RedirectionId {
     private constructor(private readonly id: string) {}
 
     public static fromString(newId: string) {
-        return new RedirectId(newId);
+        return new RedirectionId(newId);
     }
 
     public toString() {

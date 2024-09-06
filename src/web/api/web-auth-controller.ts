@@ -14,7 +14,7 @@ import { CreateAuthResponse } from './dtos/create-auth-response';
 
 @Controller('auth')
 @ApiTags('Auth')
-export class AuthController {
+export class WebAuthController {
     public constructor(private userInteractor: UserInteractor) {}
 
     @ApiOperation({ summary: 'Creates access token for given user' })

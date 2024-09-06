@@ -1,16 +1,18 @@
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Injectable } from '@nestjs/common';
-import { RedirectViewedObservable } from '../application/ports/redirect-viewed-observable';
-import { RedirectViewedObserver } from '../application/ports/redirect-viewed-observer';
-import { RedirectViewed } from '../domain/redirect-viewed';
+import { RedirectionUsedObservable } from '../application/ports/redirection-used-observable';
+import { RedirectionUsedObserver } from '../application/ports/redirection-used-observer';
+import { RedirectionUsed } from '../domain/redirection-used';
 
 @Injectable()
-export class NestRedirectViewedObservable implements RedirectViewedObservable {
-    private readonly eventName = 'redirect_viewed';
+export class NestRedirectionUsedObservable
+    implements RedirectionUsedObservable
+{
+    private readonly eventName = 'redirection_used';
 
     public constructor(private readonly nestEventEmitter: EventEmitter2) {}
 
-    public subscribe(observer: RedirectViewedObserver) {
+    public subscribe(observer: RedirectionUsedObserver) {
         const callback = observer.update.bind(observer);
 
         this.nestEventEmitter.on(this.eventName, callback, {
@@ -18,7 +20,7 @@ export class NestRedirectViewedObservable implements RedirectViewedObservable {
         });
     }
 
-    public async publish(event: RedirectViewed) {
+    public async publish(event: RedirectionUsed) {
         try {
             await this.nestEventEmitter.emitAsync(this.eventName, event);
         } catch (ex) {

@@ -14,18 +14,18 @@ datasource db {
 }
 
 model User {
-  id          String     @id
-  username    String     @unique
+  id          String        @id
+  username    String        @unique
   password    String
   displayName String
   bio         String
-  redirects   Redirect[]
+  redirects   Redirection[]
 }
 
-model Redirect {
-  id         String @id
-  url        String
-  viewsCount Int
-  owner      User   @relation(fields: [ownerId], references: [id])
-  ownerId    String
+model Redirection {
+  id        String @id
+  url       String
+  usesCount Int
+  owner     User   @relation(fields: [ownerId], references: [id])
+  ownerId   String
 }

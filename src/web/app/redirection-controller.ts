@@ -1,13 +1,13 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { NoSuchRedirect } from '../../core/domain/no-such-redirect';
-import { RedirectId } from '../../core/domain/redirect-id';
-import { RedirectInteractor } from '../../core/application/interactors/redirect-interactor';
+import { NoSuchRedirection } from '../../core/domain/no-such-redirection';
+import { RedirectionId } from '../../core/domain/redirection-id';
+import { RedirectionInteractor } from '../../core/application/interactors/redirection-interactor';
 import { UseRedirectResponse } from './dtos/use-redirect-response';
 import { Redirect, RedirectMethod } from './http-redirect-fasade';
 
 @Controller('r')
-export class RedirectController {
-    public constructor(private redirectInteractor: RedirectInteractor) {}
+export class RedirectionController {
+    public constructor(private redirectInteractor: RedirectionInteractor) {}
 
     @Get('/:id')
     public async read(
@@ -15,12 +15,12 @@ export class RedirectController {
         @RedirectMethod() redirect: Redirect,
     ) {
         try {
-            const redirection = await this.redirectInteractor.view(
-                RedirectId.fromString(id),
+            const redirection = await this.redirectInteractor.use(
+                RedirectionId.fromString(id),
             );
             redirect(UseRedirectResponse.fromRedirect(redirection));
         } catch (ex) {
-            if (ex instanceof NoSuchRedirect) {
+            if (ex instanceof NoSuchRedirection) {
                 return 'Not Found';
             }
         }
