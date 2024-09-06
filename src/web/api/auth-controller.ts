@@ -7,9 +7,9 @@ import {
     ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { CreateAuthRequest } from './dtos/create-auth-request';
-import { WrongPassword } from '../core/domain/wrong-password';
-import { UserInteractor } from '../core/application/interactors/user-interactor';
-import { NoSuchUser } from '../core/domain/no-such-user';
+import { WrongPassword } from '../../core/domain/wrong-password';
+import { UserInteractor } from '../../core/application/interactors/user-interactor';
+import { NoSuchUser } from '../../core/domain/no-such-user';
 import { CreateAuthResponse } from './dtos/create-auth-response';
 
 @Controller('auth')

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Redirect } from '../../core/domain/redirect';
+import { Redirect } from '../../../core/domain/redirect';
 
 class ReadManySingleRedirectResponse {
     @ApiProperty()

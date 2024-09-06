@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Token } from '../../core/domain/token';
+import { Token } from '../../../core/domain/token';
 
 export class CreateAuthResponse {
     @ApiProperty()

@@ -17,16 +17,16 @@ import {
     ApiTags,
 } from '@nestjs/swagger';
 import { CreateUserRequest } from './dtos/create-user-request';
-import { UsernameOccupied } from '../core/domain/username-occupied';
-import { UserInteractor } from '../core/application/interactors/user-interactor';
-import { GetAuthenticatedUser } from './auth/get-authenticated-user';
-import { UseAuth } from './auth/use-auth';
-import { AuthenticatedUser } from './auth/authenticated-user';
-import { UserId } from '../core/domain/user-id';
+import { UsernameOccupied } from '../../core/domain/username-occupied';
+import { UserInteractor } from '../../core/application/interactors/user-interactor';
+import { GetAuthenticatedUser } from '../auth/get-authenticated-user';
+import { UseAuth } from '../auth/use-auth';
+import { AuthenticatedUser } from '../auth/authenticated-user';
+import { UserId } from '../../core/domain/user-id';
 import { UpdateUserPasswordRequest } from './dtos/update-user-password-request';
-import { NoSuchUser } from '../core/domain/no-such-user';
-import { WrongPassword } from '../core/domain/wrong-password';
-import { NewPasswordSameAsOld } from '../core/domain/new-password-same-as-old';
+import { NoSuchUser } from '../../core/domain/no-such-user';
+import { WrongPassword } from '../../core/domain/wrong-password';
+import { NewPasswordSameAsOld } from '../../core/domain/new-password-same-as-old';
 
 @Controller('users')
 @ApiTags('User')

@@ -5,12 +5,12 @@ import {
     ApiTags,
 } from '@nestjs/swagger';
 import { Controller, Get } from '@nestjs/common';
-import { UserId } from '../core/domain/user-id';
+import { UserId } from '../../core/domain/user-id';
 import { ReadUserProfileResponse } from './dtos/read-user-profile-response';
-import { UseAuth } from './auth/use-auth';
-import { GetAuthenticatedUser } from './auth/get-authenticated-user';
-import { AuthenticatedUser } from './auth/authenticated-user';
-import { UserInteractor } from '../core/application/interactors/user-interactor';
+import { UseAuth } from '../auth/use-auth';
+import { GetAuthenticatedUser } from '../auth/get-authenticated-user';
+import { AuthenticatedUser } from '../auth/authenticated-user';
+import { UserInteractor } from '../../core/application/interactors/user-interactor';
 
 @Controller('/users/@me/profile')
 @ApiTags('User profile')

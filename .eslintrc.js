@@ -26,5 +26,6 @@ module.exports = {
         'class-methods-use-this': 'off',
         '@typescript-eslint/explicit-member-accessibility': 'error',
         'max-classes-per-file': 'off',
+        'consistent-return': 'off',
     },
 };

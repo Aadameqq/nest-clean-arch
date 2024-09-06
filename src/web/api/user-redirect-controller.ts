@@ -1,13 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ReadManyRedirectsResponse } from './dtos/read-many-redirects-response';
-import { UseAuth } from './auth/use-auth';
-import { GetAuthenticatedUser } from './auth/get-authenticated-user';
-import { AuthenticatedUser } from './auth/authenticated-user';
-import { RedirectInteractor } from '../core/application/interactors/redirect-interactor';
+import { UseAuth } from '../auth/use-auth';
+import { GetAuthenticatedUser } from '../auth/get-authenticated-user';
+import { AuthenticatedUser } from '../auth/authenticated-user';
+import { RedirectInteractor } from '../../core/application/interactors/redirect-interactor';
 
 @Controller('/users/@me/redirects')
-@ApiTags('Redirect')
+@ApiTags('User redirect')
 export class UserRedirectController {
     public constructor(private redirectInteractor: RedirectInteractor) {}
 

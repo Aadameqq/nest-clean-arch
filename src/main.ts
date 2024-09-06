@@ -3,6 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ConfigurationService } from './configuration/configuration.service';
+import { ApiModule } from './web/api/api-module';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -19,16 +20,20 @@ async function bootstrap() {
             })
             .addTag('Auth')
             .addTag('Redirect')
+            .addTag('User redirect')
             .addTag('User')
             .addTag('User profile')
             .build();
 
-        const document = SwaggerModule.createDocument(app, config);
+        const document = SwaggerModule.createDocument(app, config, {
+            include: [ApiModule],
+        });
 
         SwaggerModule.setup(
             configurationService.get('SWAGGER_PATH'),
             app,
             document,
+            {},
         );
     }
 

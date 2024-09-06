@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '../../core/domain/user';
+import { User } from '../../../core/domain/user';
 
 export class ReadUserProfileResponse {
     @ApiProperty()
