@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
-import { AppModule } from './app.module';
+import { AppModule } from './app-module';
 import { ConfigurationService } from './configuration/configuration.service';
-import { ApiModule } from './web/api/api-module';
+import { WebApiModule } from './web/api/web-api-module';
 
 function removePrefixFromDocPaths(
     prefix: string,
@@ -43,11 +43,11 @@ async function bootstrap() {
             .addTag('User redirection')
             .addTag('User')
             .addTag('User profile')
-            .addServer('/api', '', {})
+            .addServer('/api')
             .build();
 
         const document = SwaggerModule.createDocument(app, config, {
-            include: [ApiModule],
+            include: [WebApiModule],
         });
 
         const updatedDocument = removePrefixFromDocPaths('/api', document);

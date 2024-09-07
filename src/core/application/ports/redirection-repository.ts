@@ -7,4 +7,5 @@ export interface RedirectionRepository {
     getAllByOwnerId(ownerId: string): Promise<Redirection[]>;
     generateIdentity(): RedirectionId;
     remove(redirection: Redirection): Promise<void>;
+    getBySlug(slug: string): Promise<Redirection | false>;
 }

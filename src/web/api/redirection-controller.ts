@@ -19,16 +19,21 @@ import { CreateRedirectionResponse } from './dtos/create-redirection-response';
 import { NoSuchRedirection } from '../../core/domain/no-such-redirection';
 import { RedirectionId } from '../../core/domain/redirection-id';
 import { CreateRedirectionRequest } from './dtos/create-redirection-request';
-import { UseAuth } from '../auth/use-auth';
-import { GetAuthenticatedUser } from '../auth/get-authenticated-user';
-import { AuthenticatedUser } from '../auth/authenticated-user';
+import { UseAuth } from './auth/use-auth';
+import { GetAuthenticatedUser } from './auth/get-authenticated-user';
+import { AuthenticatedUser } from './auth/authenticated-user';
 import { RedirectionInteractor } from '../../core/application/interactors/redirection-interactor';
 import { UserIsNotRedirectionOwner } from '../../core/domain/user-is-not-redirection-owner';
+import { ConfigurationService } from '../../configuration/configuration.service';
+import { ShortenedUrlGenerator } from './shortened-url-generator';
 
 @Controller('redirections')
 @ApiTags('Redirection')
 export class RedirectionController {
-    public constructor(private redirectionInteractor: RedirectionInteractor) {}
+    public constructor(
+        private redirectionInteractor: RedirectionInteractor,
+        private shortenedUrlGenerator: ShortenedUrlGenerator,
+    ) {}
 
     @ApiBearerAuth()
     @ApiCreatedResponse({ type: CreateRedirectionResponse })
@@ -42,7 +47,10 @@ export class RedirectionController {
             url,
             user.id,
         );
-        return CreateRedirectionResponse.fromRedirection(redirection);
+
+        return CreateRedirectionResponse.fromShortenedUrl(
+            this.shortenedUrlGenerator.generateFromRedirection(redirection),
+        );
     }
 
     @ApiBearerAuth()

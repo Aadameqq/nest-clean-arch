@@ -24,6 +24,16 @@ export class PrismaRedirectionRepository implements RedirectionRepository {
         return this.convertModelToRedirection(found);
     }
 
+    public async getBySlug(slug: string): Promise<Redirection | false> {
+        const found = await this.prismaService.redirection.findUnique({
+            where: { slug },
+        });
+
+        if (!found) return false;
+
+        return this.convertModelToRedirection(found);
+    }
+
     public async persist(redirection: Redirection): Promise<void> {
         const redirectionModel = this.convertRedirectionToModel(redirection);
 
@@ -53,6 +63,7 @@ export class PrismaRedirectionRepository implements RedirectionRepository {
             RedirectionId.fromString(model.id),
             model.url,
             model.ownerId,
+            model.slug,
             model.usesCount,
         );
     }
@@ -64,6 +75,7 @@ export class PrismaRedirectionRepository implements RedirectionRepository {
             id: redirection.id.toString(),
             url: redirection.url,
             ownerId: redirection.ownerId,
+            slug: redirection.slug,
             usesCount: redirection.usesCount,
         };
     }

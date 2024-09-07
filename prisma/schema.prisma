@@ -27,5 +27,6 @@ model Redirection {
   url       String
   usesCount Int
   owner     User   @relation(fields: [ownerId], references: [id])
+  slug      String @unique
   ownerId   String
 }

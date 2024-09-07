@@ -7,18 +7,20 @@ import { RedirectionInteractor } from './redirection-interactor';
 import { RedirectionUsedObservable } from '../ports/redirection-used-observable';
 import { RedirectionUsed } from '../../domain/redirection-used';
 import { UserIsNotRedirectionOwner } from '../../domain/user-is-not-redirection-owner';
+import { SlugGenerator } from '../ports/slug-generator';
 
 @Injectable()
 export class RedirectionInteractorImpl extends RedirectionInteractor {
     public constructor(
         private redirectionRepository: RedirectionRepository,
         private redirectionUsedObservable: RedirectionUsedObservable,
+        private slugGenerator: SlugGenerator,
     ) {
         super();
     }
 
-    public async use(id: RedirectionId) {
-        const redirection = await this.redirectionRepository.getById(id);
+    public async use(slug: string) {
+        const redirection = await this.redirectionRepository.getBySlug(slug);
 
         if (!redirection) throw new NoSuchRedirection();
 
@@ -31,8 +33,9 @@ export class RedirectionInteractorImpl extends RedirectionInteractor {
 
     public async create(url: string, ownerId: string) {
         const id = this.redirectionRepository.generateIdentity();
+        const slug = this.slugGenerator.generate();
 
-        const redirection = new Redirection(id, url, ownerId);
+        const redirection = new Redirection(id, url, ownerId, slug);
 
         await this.redirectionRepository.persist(redirection);
 

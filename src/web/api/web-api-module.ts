@@ -2,19 +2,20 @@ import { Module } from '@nestjs/common';
 import { RedirectionController } from './redirection-controller';
 import { UserRedirectionController } from './user-redirection-controller';
 import { UserProfileController } from './user-profile-controller';
-import { WebAuthController } from './web-auth-controller';
+import { AuthController } from './auth-controller';
 import { UserController } from './user-controller';
-import { AuthModule } from '../auth/auth-module';
-import { CoreModule } from '../../core/core.module';
+import { CoreModule } from '../../core/core-module';
+import { ShortenedUrlGenerator } from './shortened-url-generator';
 
 @Module({
-    imports: [AuthModule, CoreModule],
+    imports: [CoreModule],
     controllers: [
         RedirectionController,
         UserRedirectionController,
         UserProfileController,
-        WebAuthController,
+        AuthController,
         UserController,
     ],
+    providers: [ShortenedUrlGenerator],
 })
-export class ApiModule {}
+export class WebApiModule {}

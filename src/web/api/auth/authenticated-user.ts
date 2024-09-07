@@ -1,4 +1,4 @@
-import { TokenPayload } from '../../core/domain/token-payload';
+import { TokenPayload } from '../../../core/domain/token-payload';
 
 export class AuthenticatedUser {
     private constructor(

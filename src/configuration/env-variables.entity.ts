@@ -13,28 +13,34 @@ export class EnvVariables {
     @IsNumber()
     @Min(0)
     @Max(65535)
-    PORT: number;
+    public readonly PORT: number;
 
     @IsEnum(Environment)
-    NODE_ENV: Environment;
+    public readonly NODE_ENV: Environment;
 
     @IsString()
-    SWAGGER_PATH: string;
+    public readonly SWAGGER_PATH: string;
 
     @IsString()
-    SWAGGER_TITLE: string;
+    public readonly SWAGGER_TITLE: string;
 
     @IsString()
-    JWT_SECRET: string;
+    public readonly JWT_SECRET: string;
 
     @IsString()
-    DATABASE_URL: string;
+    public readonly DATABASE_URL: string;
 
     @IsNumber()
-    PASSWORD_SALT_ROUNDS: number;
+    public readonly PASSWORD_SALT_ROUNDS: number;
 
     @IsNumber()
-    JWT_EXPIRATION_TIME_IN_SECONDS: number;
+    public readonly JWT_EXPIRATION_TIME_IN_SECONDS: number;
+
+    @IsNumber()
+    public readonly SLUG_LENGTH: number;
+
+    @IsString()
+    public readonly SHORTENED_LINK_BASE_PATH: string;
 }
 
 export const validate = (config: Record<string, unknown>) => {

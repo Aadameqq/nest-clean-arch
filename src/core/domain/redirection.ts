@@ -8,6 +8,8 @@ export class Redirection {
 
         public ownerId: string,
 
+        public slug: string,
+
         public usesCount: number = 0,
     ) {}
 

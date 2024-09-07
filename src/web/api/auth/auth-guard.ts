@@ -4,9 +4,9 @@ import {
     Injectable,
     UnauthorizedException,
 } from '@nestjs/common';
-import { InvalidToken } from '../../core/domain/invalid-token';
-import { UserInteractor } from '../../core/application/interactors/user-interactor';
-import { Token } from '../../core/domain/token';
+import { InvalidToken } from '../../../core/domain/invalid-token';
+import { UserInteractor } from '../../../core/application/interactors/user-interactor';
+import { Token } from '../../../core/domain/token';
 import { AuthenticatedUser } from './authenticated-user';
 
 @Injectable()

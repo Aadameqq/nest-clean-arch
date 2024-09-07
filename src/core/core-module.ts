@@ -11,6 +11,7 @@ import { JsonwebtokenTokenManager } from './infrastructure/jsonwebtoken-token-ma
 import { PrismaService } from './infrastructure/data/prisma-service';
 import { NestRedirectionUsedObservable } from './infrastructure/nest-redirection-used-observable.service';
 import { UsesCountOnRedirectionUsed } from './application/event-observers/uses-count-on-redirection-used';
+import { NanoidSlugGenerator } from './infrastructure/nanoid-slug-generator';
 
 @Module({
     imports: [EventEmitterModule.forRoot()], // TODO:
@@ -34,16 +35,23 @@ import { UsesCountOnRedirectionUsed } from './application/event-observers/uses-c
             useFactory: (
                 repository: PrismaRedirectionRepository,
                 observable: NestRedirectionUsedObservable,
+                slugGenerator: NanoidSlugGenerator,
             ) => {
-                return new RedirectionInteractorImpl(repository, observable);
+                return new RedirectionInteractorImpl(
+                    repository,
+                    observable,
+                    slugGenerator,
+                );
             },
             inject: [
                 PrismaRedirectionRepository,
                 NestRedirectionUsedObservable,
+                NanoidSlugGenerator,
             ],
         },
         PrismaRedirectionRepository,
         NestRedirectionUsedObservable,
+        NanoidSlugGenerator,
 
         {
             provide: UserInteractor,
