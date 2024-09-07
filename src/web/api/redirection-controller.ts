@@ -24,7 +24,6 @@ import { GetAuthenticatedUser } from './auth/get-authenticated-user';
 import { AuthenticatedUser } from './auth/authenticated-user';
 import { RedirectionInteractor } from '../../core/application/interactors/redirection-interactor';
 import { UserIsNotRedirectionOwner } from '../../core/domain/user-is-not-redirection-owner';
-import { ConfigurationService } from '../../configuration/configuration.service';
 import { ShortenedUrlGenerator } from './shortened-url-generator';
 
 @Controller('redirections')
