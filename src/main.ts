@@ -31,34 +31,32 @@ async function bootstrap() {
 
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
-    if (configurationService.isDevelopment()) {
-        const config = new DocumentBuilder()
-            .setTitle(configurationService.get('SWAGGER_TITLE'))
-            .addBearerAuth({
-                description: 'Use token received from POST /auth/ endpoint',
-                type: 'http',
-            })
-            .addTag('Auth')
-            .addTag('Redirection')
-            .addTag('User redirection')
-            .addTag('User')
-            .addTag('User profile')
-            .addServer('/api')
-            .build();
+    const config = new DocumentBuilder()
+        .setTitle(configurationService.get('SWAGGER_TITLE'))
+        .addBearerAuth({
+            description: 'Use token received from POST /auth/ endpoint',
+            type: 'http',
+        })
+        .addTag('Auth')
+        .addTag('Redirection')
+        .addTag('User redirection')
+        .addTag('User')
+        .addTag('User profile')
+        .addServer('/api')
+        .build();
 
-        const document = SwaggerModule.createDocument(app, config, {
-            include: [WebApiModule],
-        });
+    const document = SwaggerModule.createDocument(app, config, {
+        include: [WebApiModule],
+    });
 
-        const updatedDocument = removePrefixFromDocPaths('/api', document);
+    const updatedDocument = removePrefixFromDocPaths('/api', document);
 
-        SwaggerModule.setup(
-            configurationService.get('SWAGGER_PATH'),
-            app,
-            updatedDocument,
-            {},
-        );
-    }
+    SwaggerModule.setup(
+        configurationService.get('SWAGGER_PATH'),
+        app,
+        updatedDocument,
+        {},
+    );
 
     await app.listen(configurationService.get('PORT'));
 
