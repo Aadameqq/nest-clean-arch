@@ -1,9 +1,29 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ConfigurationService } from './configuration/configuration.service';
 import { ApiModule } from './web/api/api-module';
+
+function removePrefixFromDocPaths(
+    prefix: string,
+    document: OpenAPIObject,
+): OpenAPIObject {
+    const newPaths = Object.keys(document.paths).reduce((acc, key: string) => {
+        if (!key.startsWith(prefix))
+            throw new Error(
+                'Every path in swagger document must start with the same prefix',
+            );
+        const newKey = key.substring(prefix.length);
+        acc[newKey] = document.paths[key];
+        return acc;
+    }, {});
+
+    return {
+        ...document,
+        paths: newPaths,
+    };
+}
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -23,16 +43,19 @@ async function bootstrap() {
             .addTag('User redirection')
             .addTag('User')
             .addTag('User profile')
+            .addServer('/api', '', {})
             .build();
 
         const document = SwaggerModule.createDocument(app, config, {
             include: [ApiModule],
         });
 
+        const updatedDocument = removePrefixFromDocPaths('/api', document);
+
         SwaggerModule.setup(
             configurationService.get('SWAGGER_PATH'),
             app,
-            document,
+            updatedDocument,
             {},
         );
     }
