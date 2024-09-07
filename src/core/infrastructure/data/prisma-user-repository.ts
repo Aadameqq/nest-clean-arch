@@ -1,17 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { v4 as uuid } from 'uuid';
+import { User as UserModel } from '@prisma/client';
 import { UserId } from '../../domain/user-id';
 import { PrismaService } from './prisma-service';
 import { UserRepository } from '../../application/ports/user-repository';
-import { User as UserModel } from '@prisma/client';
 import { User } from '../../domain/user';
-import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
     public constructor(private prismaService: PrismaService) {}
 
     public async getById(id: UserId): Promise<User | false> {
-        console.log(id.toString());
         const found = await this.prismaService.user.findUnique({
             where: {
                 id: id.toString(),

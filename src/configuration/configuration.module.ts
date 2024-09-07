@@ -8,5 +8,5 @@ import { ConfigurationService } from './configuration.service';
     providers: [ConfigurationService],
     exports: [ConfigurationService],
 })
-@Global() //TODO:
+@Global() // TODO:
 export class ConfigurationModule {}
