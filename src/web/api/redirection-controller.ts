@@ -1,5 +1,6 @@
 import {
     Body,
+    ConflictException,
     Controller,
     Delete,
     ForbiddenException,
@@ -9,6 +10,7 @@ import {
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
+    ApiConflictResponse,
     ApiCreatedResponse,
     ApiForbiddenResponse,
     ApiNotFoundResponse,
@@ -25,6 +27,7 @@ import { AuthenticatedUser } from './auth/authenticated-user';
 import { RedirectionInteractor } from '../../core/application/interactors/redirection-interactor';
 import { UserIsNotRedirectionOwner } from '../../core/domain/user-is-not-redirection-owner';
 import { ShortenedUrlGenerator } from './shortened-url-generator';
+import { RedirectionAlreadyExistsForOwner } from '../../core/domain/RedirectionAlreadyExistsForOwner';
 
 @Controller('redirections')
 @ApiTags('Redirection')
@@ -42,14 +45,22 @@ export class RedirectionController {
         @Body() { url }: CreateRedirectionRequest,
         @GetAuthenticatedUser() user: AuthenticatedUser,
     ): Promise<CreateRedirectionResponse> {
-        const redirection = await this.redirectionInteractor.create(
-            url,
-            user.id,
-        );
+        try {
+            const redirection = await this.redirectionInteractor.create(
+                url,
+                user.id,
+            );
 
-        return CreateRedirectionResponse.fromShortenedUrl(
-            this.shortenedUrlGenerator.generateFromRedirection(redirection),
-        );
+            return CreateRedirectionResponse.fromShortenedUrl(
+                this.shortenedUrlGenerator.generateFromRedirection(redirection),
+            );
+        } catch (ex) {
+            if (ex instanceof RedirectionAlreadyExistsForOwner) {
+                throw new ConflictException(
+                    `User has already created redirection for given url`,
+                );
+            }
+        }
     }
 
     @ApiBearerAuth()

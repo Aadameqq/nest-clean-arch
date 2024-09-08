@@ -8,6 +8,7 @@ import { RedirectionUsedObservable } from '../ports/redirection-used-observable'
 import { RedirectionUsed } from '../../domain/redirection-used';
 import { UserIsNotRedirectionOwner } from '../../domain/user-is-not-redirection-owner';
 import { SlugGenerator } from '../ports/slug-generator';
+import { RedirectionAlreadyExistsForOwner } from '../../domain/RedirectionAlreadyExistsForOwner';
 
 @Injectable()
 export class RedirectionInteractorImpl extends RedirectionInteractor {
@@ -32,6 +33,13 @@ export class RedirectionInteractorImpl extends RedirectionInteractor {
     }
 
     public async create(url: string, ownerId: string) {
+        const found = await this.redirectionRepository.getByOwnerAndUrl(
+            url,
+            ownerId,
+        );
+
+        if (found) throw new RedirectionAlreadyExistsForOwner(found);
+
         const id = this.redirectionRepository.generateIdentity();
         const slug = this.slugGenerator.generate();
 

@@ -14,6 +14,19 @@ export class PrismaRedirectionRepository implements RedirectionRepository {
         return RedirectionId.fromString(uuid());
     }
 
+    public async getByOwnerAndUrl(
+        url: string,
+        ownerId: string,
+    ): Promise<Redirection | false> {
+        const found = await this.prismaService.redirection.findFirst({
+            where: { url, ownerId },
+        });
+
+        if (!found) return false;
+
+        return this.convertModelToRedirection(found);
+    }
+
     public async getById(id: RedirectionId): Promise<Redirection | false> {
         const found = await this.prismaService.redirection.findUnique({
             where: { id: id.toString() },
