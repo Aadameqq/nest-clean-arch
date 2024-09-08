@@ -1,5 +1,5 @@
 import { IsEnum } from 'class-validator';
-import { parseEnv } from './parse-env';
+import { parseConfig } from './parse-config';
 
 export enum Environment {
     Production = 'production',
@@ -7,7 +7,7 @@ export enum Environment {
     Test = 'test',
 }
 
-class CommonEnv {
+class CommonConfig {
     @IsEnum(Environment)
     public readonly NODE_ENV: Environment;
 
@@ -20,4 +20,4 @@ class CommonEnv {
     }
 }
 
-export const commonEnv = parseEnv(CommonEnv);
+export const commonConfig = parseConfig(CommonConfig);

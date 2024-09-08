@@ -3,8 +3,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 import { AppModule } from './app-module';
 import { WebApiModule } from './web/api/web-api-module';
-import { webEnv } from './web-env';
-import { commonEnv } from './config/common-env';
+import { webConfig } from './web-config';
+import { commonConfig } from './config/common-config';
 
 function removePrefixFromDocPaths(
     prefix: string,
@@ -32,7 +32,7 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
     const config = new DocumentBuilder()
-        .setTitle(webEnv.SWAGGER_TITLE)
+        .setTitle(webConfig.SWAGGER_TITLE)
         .addBearerAuth({
             description: 'Use token received from POST /auth/ endpoint',
             type: 'http',
@@ -51,13 +51,13 @@ async function bootstrap() {
 
     const updatedDocument = removePrefixFromDocPaths('/api', document);
 
-    SwaggerModule.setup(webEnv.SWAGGER_PATH, app, updatedDocument, {});
+    SwaggerModule.setup(webConfig.SWAGGER_PATH, app, updatedDocument, {});
 
-    await app.listen(webEnv.PORT);
+    await app.listen(webConfig.PORT);
 
-    if (commonEnv.isDevelopment()) {
+    if (commonConfig.isDevelopment()) {
         console.log(
-            `App hosted on http://localhost:${webEnv.PORT}/${webEnv.SWAGGER_PATH}`,
+            `App hosted on http://localhost:${webConfig.PORT}/${webConfig.SWAGGER_PATH}`,
         );
     }
 }

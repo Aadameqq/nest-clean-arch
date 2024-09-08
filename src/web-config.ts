@@ -1,6 +1,6 @@
 import { IsNumber, IsString, Max, Min } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { parseEnv } from './config/parse-env';
+import { parseConfig } from './config/parse-config';
 
 const trimSlashes = (str: string) => {
     let trimmed = str;
@@ -13,7 +13,7 @@ const trimSlashes = (str: string) => {
     return trimmed;
 };
 
-export class WebEnv {
+export class WebConfig {
     @IsNumber()
     @Min(0)
     @Max(65535)
@@ -34,4 +34,4 @@ export class WebEnv {
     public readonly DOMAIN: string;
 }
 
-export const webEnv = parseEnv(WebEnv);
+export const webConfig = parseConfig(WebConfig);

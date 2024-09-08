@@ -1,12 +1,12 @@
 import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { PasswordHasher } from '../application/ports/password-hasher';
-import { coreEnv } from './core-env';
+import { coreConfig } from './core-config';
 
 @Injectable()
 export class BcryptPasswordHasher implements PasswordHasher {
     public async hash(password: string): Promise<string> {
-        return bcrypt.hash(password, coreEnv.PASSWORD_SALT_ROUNDS);
+        return bcrypt.hash(password, coreConfig.PASSWORD_SALT_ROUNDS);
     }
 
     public async compare(

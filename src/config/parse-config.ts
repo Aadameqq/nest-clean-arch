@@ -6,8 +6,10 @@ type Constructor<T> = {
     new (...args: unknown[]): T;
 };
 
-export const parseEnv = <T extends object>(envClass: Constructor<T>): T => {
-    const validatedConfig = plainToInstance(envClass, process.env, {
+export const parseConfig = <T extends object>(
+    configClass: Constructor<T>,
+): T => {
+    const validatedConfig = plainToInstance(configClass, process.env, {
         enableImplicitConversion: true,
     });
     const errors = validateSync(validatedConfig, {});

@@ -1,7 +1,7 @@
 import { IsNumber, IsString } from 'class-validator';
-import { parseEnv } from '../../config/parse-env';
+import { parseConfig } from '../../config/parse-config';
 
-class CoreEnv {
+class CoreConfig {
     @IsString()
     public readonly JWT_SECRET: string;
 
@@ -18,4 +18,4 @@ class CoreEnv {
     public readonly SLUG_LENGTH: number;
 }
 
-export const coreEnv = parseEnv(CoreEnv);
+export const coreConfig = parseConfig(CoreConfig);

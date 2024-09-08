@@ -4,7 +4,7 @@ import { TokenManager } from '../application/ports/token-manager';
 import { Token } from '../domain/token';
 import { TokenPayload } from '../domain/token-payload';
 import { User } from '../domain/user';
-import { coreEnv } from './core-env';
+import { coreConfig } from './core-config';
 
 type AuthDataJwtPayload = {
     id: string;
@@ -18,8 +18,8 @@ export class JsonwebtokenTokenManager implements TokenManager {
     private readonly expirationTime: number;
 
     public constructor() {
-        this.secret = coreEnv.JWT_SECRET;
-        this.expirationTime = coreEnv.JWT_EXPIRATION_TIME_IN_SECONDS;
+        this.secret = coreConfig.JWT_SECRET;
+        this.expirationTime = coreConfig.JWT_EXPIRATION_TIME_IN_SECONDS;
     }
 
     public createToken = (user: User): Token => {

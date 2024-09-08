@@ -1,5 +1,5 @@
-import { webEnv } from '../../web-env';
+import { webConfig } from '../../web-config';
 
 export const generateShortenedUrl = (slug: string) => {
-    return `${webEnv.DOMAIN}/${webEnv.SHORTENED_LINK_ROUTE}/${slug}`;
+    return `${webConfig.DOMAIN}/${webConfig.SHORTENED_LINK_ROUTE}/${slug}`;
 };
