@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Redirection } from '../../../core/domain/redirection';
-import { ShortenedUrlGenerator } from '../shortened-url-generator';
+import { generateShortenedUrl } from '../generate-shortened-url';
 
 class ReadManySingleRedirectionResponse {
     @ApiProperty()
@@ -27,14 +27,11 @@ class ReadManySingleRedirectionResponse {
         this.usesCount = usesCount;
     }
 
-    public static fromRedirection(
-        redirection: Redirection,
-        shortenedUrlGenerator: ShortenedUrlGenerator,
-    ) {
+    public static fromRedirection(redirection: Redirection) {
         return new ReadManySingleRedirectionResponse(
             redirection.id.toString(),
             redirection.url,
-            shortenedUrlGenerator.generateFromRedirection(redirection),
+            generateShortenedUrl(redirection.slug),
             redirection.usesCount,
         );
     }
@@ -48,16 +45,10 @@ export class ReadManyRedirectionsResponse {
         this.redirections = redirections;
     }
 
-    public static fromRedirectionList(
-        redirections: Redirection[],
-        shortenedUrlGenerator: ShortenedUrlGenerator,
-    ) {
+    public static fromRedirectionList(redirections: Redirection[]) {
         return new ReadManyRedirectionsResponse(
             redirections.map((redirection) =>
-                ReadManySingleRedirectionResponse.fromRedirection(
-                    redirection,
-                    shortenedUrlGenerator,
-                ),
+                ReadManySingleRedirectionResponse.fromRedirection(redirection),
             ),
         );
     }

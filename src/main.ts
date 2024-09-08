@@ -2,8 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 import { AppModule } from './app-module';
-import { ConfigurationService } from './configuration/configuration.service';
 import { WebApiModule } from './web/api/web-api-module';
+import { webEnv } from './web-env';
+import { commonEnv } from './config/common-env';
 
 function removePrefixFromDocPaths(
     prefix: string,
@@ -27,12 +28,11 @@ function removePrefixFromDocPaths(
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    const configurationService = app.get(ConfigurationService);
 
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
     const config = new DocumentBuilder()
-        .setTitle(configurationService.get('SWAGGER_TITLE'))
+        .setTitle(webEnv.SWAGGER_TITLE)
         .addBearerAuth({
             description: 'Use token received from POST /auth/ endpoint',
             type: 'http',
@@ -51,15 +51,14 @@ async function bootstrap() {
 
     const updatedDocument = removePrefixFromDocPaths('/api', document);
 
-    SwaggerModule.setup(
-        configurationService.get('SWAGGER_PATH'),
-        app,
-        updatedDocument,
-        {},
-    );
+    SwaggerModule.setup(webEnv.SWAGGER_PATH, app, updatedDocument, {});
 
-    await app.listen(configurationService.get('PORT'));
+    await app.listen(webEnv.PORT);
 
-    console.log(`App hosted on port `, configurationService.get('PORT'));
+    if (commonEnv.isDevelopment()) {
+        console.log(
+            `App hosted on http://localhost:${webEnv.PORT}/${webEnv.SWAGGER_PATH}`,
+        );
+    }
 }
 bootstrap();

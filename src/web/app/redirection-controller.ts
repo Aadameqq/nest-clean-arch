@@ -3,8 +3,9 @@ import { NoSuchRedirection } from '../../core/domain/no-such-redirection';
 import { RedirectionInteractor } from '../../core/application/interactors/redirection-interactor';
 import { ReadRedirectionForwardingInstructions } from './dtos/read-redirection-forwarding-instructions';
 import { Redirect, RedirectMethod } from './http-redirect-fasade';
+import { webEnv } from '../../web-env';
 
-@Controller('r')
+@Controller(webEnv.SHORTENED_LINK_ROUTE)
 export class RedirectionController {
     public constructor(private redirectInteractor: RedirectionInteractor) {}
 

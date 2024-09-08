@@ -1,4 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Redirection } from '../../../core/domain/redirection';
+import { generateShortenedUrl } from '../generate-shortened-url';
 
 export class CreateRedirectionResponse {
     @ApiProperty()
@@ -8,7 +10,9 @@ export class CreateRedirectionResponse {
         this.shortenedUrl = shortenedUrl;
     }
 
-    public static fromShortenedUrl(shortenedUrl: string) {
-        return new CreateRedirectionResponse(shortenedUrl);
+    public static fromRedirection(redirection: Redirection) {
+        return new CreateRedirectionResponse(
+            generateShortenedUrl(redirection.slug),
+        );
     }
 }

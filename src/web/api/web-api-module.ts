@@ -5,7 +5,6 @@ import { UserProfileController } from './user-profile-controller';
 import { AuthController } from './auth-controller';
 import { UserController } from './user-controller';
 import { CoreModule } from '../../core/core-module';
-import { ShortenedUrlGenerator } from './shortened-url-generator';
 
 @Module({
     imports: [CoreModule],
@@ -16,6 +15,5 @@ import { ShortenedUrlGenerator } from './shortened-url-generator';
         AuthController,
         UserController,
     ],
-    providers: [ShortenedUrlGenerator],
 })
 export class WebApiModule {}

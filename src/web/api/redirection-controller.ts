@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
-    ApiConflictResponse,
     ApiCreatedResponse,
     ApiForbiddenResponse,
     ApiNotFoundResponse,
@@ -26,16 +25,12 @@ import { GetAuthenticatedUser } from './auth/get-authenticated-user';
 import { AuthenticatedUser } from './auth/authenticated-user';
 import { RedirectionInteractor } from '../../core/application/interactors/redirection-interactor';
 import { UserIsNotRedirectionOwner } from '../../core/domain/user-is-not-redirection-owner';
-import { ShortenedUrlGenerator } from './shortened-url-generator';
 import { RedirectionAlreadyExistsForOwner } from '../../core/domain/RedirectionAlreadyExistsForOwner';
 
 @Controller('redirections')
 @ApiTags('Redirection')
 export class RedirectionController {
-    public constructor(
-        private redirectionInteractor: RedirectionInteractor,
-        private shortenedUrlGenerator: ShortenedUrlGenerator,
-    ) {}
+    public constructor(private redirectionInteractor: RedirectionInteractor) {}
 
     @ApiBearerAuth()
     @ApiCreatedResponse({ type: CreateRedirectionResponse })
@@ -51,9 +46,7 @@ export class RedirectionController {
                 user.id,
             );
 
-            return CreateRedirectionResponse.fromShortenedUrl(
-                this.shortenedUrlGenerator.generateFromRedirection(redirection),
-            );
+            return CreateRedirectionResponse.fromRedirection(redirection);
         } catch (ex) {
             if (ex instanceof RedirectionAlreadyExistsForOwner) {
                 throw new ConflictException(
