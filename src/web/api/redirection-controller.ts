@@ -4,12 +4,14 @@ import {
     Controller,
     Delete,
     ForbiddenException,
+    Get,
     NotFoundException,
     Param,
     Post,
 } from '@nestjs/common';
 import {
     ApiBearerAuth,
+    ApiConflictResponse,
     ApiCreatedResponse,
     ApiForbiddenResponse,
     ApiNotFoundResponse,
@@ -26,6 +28,8 @@ import { AuthenticatedUser } from './auth/authenticated-user';
 import { RedirectionInteractor } from '../../core/application/interactors/redirection-interactor';
 import { UserIsNotRedirectionOwner } from '../../core/domain/user-is-not-redirection-owner';
 import { RedirectionAlreadyExistsForOwner } from '../../core/domain/RedirectionAlreadyExistsForOwner';
+import { ReadRedirectionResponse } from './dtos/read-redirection-response';
+import { LinkToGetMethod, LinkToGetMethodFn } from './link-to-get-method';
 
 @Controller('redirections')
 @ApiTags('Redirection')
@@ -33,26 +37,64 @@ export class RedirectionController {
     public constructor(private redirectionInteractor: RedirectionInteractor) {}
 
     @ApiBearerAuth()
-    @ApiCreatedResponse({ type: CreateRedirectionResponse })
+    @ApiCreatedResponse({
+        type: CreateRedirectionResponse,
+    })
+    @ApiConflictResponse({
+        description: 'User has already created redirection for given url',
+        headers: {
+            Location: {
+                description: 'Location of already existing redirection',
+            },
+        },
+    })
     @UseAuth()
     @Post()
     public async create(
         @Body() { url }: CreateRedirectionRequest,
         @GetAuthenticatedUser() user: AuthenticatedUser,
+        @LinkToGetMethodFn() link: LinkToGetMethod,
     ): Promise<CreateRedirectionResponse> {
         try {
             const redirection = await this.redirectionInteractor.create(
                 url,
                 user.id,
             );
-
             return CreateRedirectionResponse.fromRedirection(redirection);
         } catch (ex) {
             if (ex instanceof RedirectionAlreadyExistsForOwner) {
+                link(ex.existingRedirection.id.toString());
                 throw new ConflictException(
                     `User has already created redirection for given url`,
                 );
             }
+        }
+    }
+
+    @ApiBearerAuth()
+    @ApiOkResponse({ type: ReadRedirectionResponse })
+    @ApiNotFoundResponse()
+    @ApiForbiddenResponse()
+    @UseAuth()
+    @Get('/:id')
+    public async read(
+        @Param('id') id: string,
+        @GetAuthenticatedUser() user: AuthenticatedUser,
+    ): Promise<ReadRedirectionResponse> {
+        try {
+            const redirection = await this.redirectionInteractor.viewOne(
+                RedirectionId.fromString(id),
+                user.id,
+            );
+            return ReadRedirectionResponse.fromRedirection(redirection);
+        } catch (ex) {
+            if (ex instanceof NoSuchRedirection) {
+                throw new NotFoundException();
+            }
+            if (ex instanceof UserIsNotRedirectionOwner) {
+                throw new ForbiddenException();
+            }
+            throw ex;
         }
     }
 

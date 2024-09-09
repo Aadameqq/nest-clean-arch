@@ -20,6 +20,17 @@ export class RedirectionInteractorImpl extends RedirectionInteractor {
         super();
     }
 
+    public async viewOne(id: RedirectionId, ownerId: string) {
+        const redirection = await this.redirectionRepository.getById(id);
+
+        if (!redirection) throw new NoSuchRedirection();
+
+        if (!redirection.isOwnedBy(ownerId))
+            throw new UserIsNotRedirectionOwner();
+
+        return redirection;
+    }
+
     public async use(slug: string) {
         const redirection = await this.redirectionRepository.getBySlug(slug);
 

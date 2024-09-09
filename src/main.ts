@@ -37,10 +37,10 @@ async function bootstrap() {
             description: 'Use token received from POST /auth/ endpoint',
             type: 'http',
         })
+        .addTag('User')
         .addTag('Auth')
         .addTag('Redirection')
         .addTag('User redirection')
-        .addTag('User')
         .addTag('User profile')
         .addServer('/api')
         .build();
