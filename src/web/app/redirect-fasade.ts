@@ -6,7 +6,7 @@ import {
 
 export type Redirect = (httpRedirection: HttpRedirectResponse) => void;
 
-export const RedirectMethod = createParamDecorator(
+export const RedirectFn = createParamDecorator(
     (_: unknown, ctx: ExecutionContext): Redirect => {
         const res = ctx.switchToHttp().getResponse();
         return (httpRedirection: HttpRedirectResponse) => {

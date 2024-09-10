@@ -29,7 +29,9 @@ import { RedirectionInteractor } from '../../core/application/interactors/redire
 import { UserIsNotRedirectionOwner } from '../../core/domain/user-is-not-redirection-owner';
 import { RedirectionAlreadyExistsForOwner } from '../../core/domain/RedirectionAlreadyExistsForOwner';
 import { ReadRedirectionResponse } from './dtos/read-redirection-response';
-import { LinkToGetMethod, LinkToGetMethodFn } from './link-to-get-method';
+import { SetHeader, SetHeaderFn } from './set-header-fasade';
+import { CurrentUrl } from './current-url-fasade';
+import { createUrl } from '../create-url';
 
 @Controller('redirections')
 @ApiTags('Redirection')
@@ -53,7 +55,8 @@ export class RedirectionController {
     public async create(
         @Body() { url }: CreateRedirectionRequest,
         @GetAuthenticatedUser() user: AuthenticatedUser,
-        @LinkToGetMethodFn() link: LinkToGetMethod,
+        @SetHeaderFn() setHeader: SetHeader,
+        @CurrentUrl() currentUrl: string,
     ): Promise<CreateRedirectionResponse> {
         try {
             const redirection = await this.redirectionInteractor.create(
@@ -63,7 +66,10 @@ export class RedirectionController {
             return CreateRedirectionResponse.fromRedirection(redirection);
         } catch (ex) {
             if (ex instanceof RedirectionAlreadyExistsForOwner) {
-                link(ex.existingRedirection.id.toString());
+                setHeader(
+                    'Location',
+                    createUrl(currentUrl, ex.existingRedirection.id.toString()),
+                );
                 throw new ConflictException(
                     `User has already created redirection for given url`,
                 );

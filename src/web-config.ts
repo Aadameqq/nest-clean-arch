@@ -1,17 +1,7 @@
 import { IsNumber, IsString, Max, Min } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { parseConfig } from './config/parse-config';
-
-const trimSlashes = (str: string) => {
-    let trimmed = str;
-    if (trimmed[0] === '/') {
-        trimmed = trimmed.slice(1);
-    }
-    if (trimmed[trimmed.length - 1] === '/') {
-        trimmed = trimmed.slice(0, -1);
-    }
-    return trimmed;
-};
+import { trimSlashes } from './web/create-url';
 
 export class WebConfig {
     @IsNumber()
