@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { CoreModule } from './core/core-module';
 import { WebModule } from './web/web-module';
+import { CoreModule } from './core/core-module';
 
 @Module({
     imports: [CoreModule, WebModule],

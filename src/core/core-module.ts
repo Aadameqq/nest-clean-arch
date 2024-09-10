@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 import { RedirectionInteractor } from './application/interactors/redirection-interactor';
 import { PrismaRedirectionRepository } from './infrastructure/data/prisma-redirection-repository';
 import { RedirectionInteractorImpl } from './application/interactors/redirection-interactor-impl';
@@ -9,24 +8,23 @@ import { UserInteractorImpl } from './application/interactors/user-interactor-im
 import { BcryptPasswordHasher } from './infrastructure/bcrypt-password-hasher';
 import { JsonwebtokenTokenManager } from './infrastructure/jsonwebtoken-token-manager';
 import { PrismaService } from './infrastructure/data/prisma-service';
-import { NestRedirectionUsedObservable } from './infrastructure/nest-redirection-used-observable.service';
+import { EventEmitter2RedirectionUsedObservable } from './infrastructure/event-emitter-2-redirection-used-observable.service';
 import { UsesCountOnRedirectionUsed } from './application/event-observers/uses-count-on-redirection-used';
 import { NanoidSlugGenerator } from './infrastructure/nanoid-slug-generator';
 
 @Module({
-    imports: [EventEmitterModule.forRoot()], // TODO:
     providers: [
         {
             provide: UsesCountOnRedirectionUsed,
             useFactory: (
                 repository: PrismaRedirectionRepository,
-                observable: NestRedirectionUsedObservable,
+                observable: EventEmitter2RedirectionUsedObservable,
             ) => {
                 return new UsesCountOnRedirectionUsed(repository, observable);
             },
             inject: [
                 PrismaRedirectionRepository,
-                NestRedirectionUsedObservable,
+                EventEmitter2RedirectionUsedObservable,
             ],
         },
 
@@ -34,7 +32,7 @@ import { NanoidSlugGenerator } from './infrastructure/nanoid-slug-generator';
             provide: RedirectionInteractor,
             useFactory: (
                 repository: PrismaRedirectionRepository,
-                observable: NestRedirectionUsedObservable,
+                observable: EventEmitter2RedirectionUsedObservable,
                 slugGenerator: NanoidSlugGenerator,
             ) => {
                 return new RedirectionInteractorImpl(
@@ -45,12 +43,12 @@ import { NanoidSlugGenerator } from './infrastructure/nanoid-slug-generator';
             },
             inject: [
                 PrismaRedirectionRepository,
-                NestRedirectionUsedObservable,
+                EventEmitter2RedirectionUsedObservable,
                 NanoidSlugGenerator,
             ],
         },
         PrismaRedirectionRepository,
-        NestRedirectionUsedObservable,
+        EventEmitter2RedirectionUsedObservable,
         NanoidSlugGenerator,
 
         {

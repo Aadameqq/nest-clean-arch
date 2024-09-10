@@ -1,6 +1,9 @@
 import { validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
-import 'dotenv/config';
+import { config } from 'dotenv';
+import { expand } from 'dotenv-expand';
+
+expand(config());
 
 type Constructor<T> = {
     new (...args: unknown[]): T;
