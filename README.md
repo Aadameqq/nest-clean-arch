@@ -1,4 +1,4 @@
-# URL Shortener
+# Nest clean architecture
 Simple url shortener made with Nest.js
 
 ##### How to run
